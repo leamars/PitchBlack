@@ -17,7 +17,10 @@ class PassThroughView: UIView {
 
 class ViewController: UIViewController {
     
+    let monthsData = ["January","February","March","April","May","June","July", "August","September","October","November","December"]
+    let years = Array(1930...2010)
     
+    @IBOutlet weak var birthdayPicker: UIPickerView!
     @IBOutlet weak var enterButton: UIButton!
     
     @IBOutlet weak var blackPassthroughView: PassThroughView!
@@ -70,7 +73,10 @@ class ViewController: UIViewController {
 //        addGestureRecognizers()
 //        //createAndStartHapticsEngine()
 //
-//        UIAccessibility.post(notification: .announcement, argument: "Deliveroo lets you order food from local restaurants.")
+    }
+    
+    private func setupPickers() {
+        
     }
     
     private func prettify() {
@@ -79,6 +85,29 @@ class ViewController: UIViewController {
     }
     
     @IBAction func didTapEnter(_ sender: Any) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+          UIAccessibility.post(notification: .announcement, argument: "Sign Up enabled.")
+        }
+    }
+    
+    @IBAction func changeState(_ sender: UISwitch) {
+        if sender.isOn {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+              UIAccessibility.post(notification: .announcement, argument: "Sign Up dimmed.")
+            }
+            
+            //UIAccessibility.post(notification: .layoutChanged, argument: "Sign Up button dimmed.")
+            //UIAccessibility.post(notification: .screenChanged, argument: "Sign Up button dimmed.")
+            
+//            UIAccessibility.post(notification: .screenChanged, argument: sender)
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+              UIAccessibility.post(notification: .announcement, argument: "Sign Up button enabled.")
+            }
+            //UIAccessibility.post(notification: .layoutChanged, argument: "Sign Up button enabled.")
+            //UIAccessibility.post(notification: .screenChanged, argument: "Sign Up button enabled.")
+//            UIAccessibility.post(notification: .screenChanged, argument: sender)
+        }
     }
     
     func addGestureRecognizers() {
@@ -222,5 +251,41 @@ class ViewController: UIViewController {
         }
     }
     
+}
+
+extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 3
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        switch component {
+        case 0:
+            return 31
+        case 1:
+            return monthsData.count
+        case 2:
+            return years.count
+        default:
+            return 0
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let label = UILabel()
+        label.textAlignment = .center
+        
+        switch component {
+        case 0:
+            label.text = "\(row + 1)"
+        case 1:
+            label.text = "\(monthsData[row])"
+        case 2:
+            label.text = "\(years[row])"
+        default: break
+        }
+        
+        return label
+    }
 }
 

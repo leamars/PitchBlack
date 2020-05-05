@@ -13,7 +13,14 @@
 * Select VoiceOver
 ![accessibility shortcut img](Img/accessibilityShortcut.png)
 
-## 5. Go Home and try it out!
+## 5. Set the speed
+
+* Go to Settings > Accessibility > Voice Over
+* Change the speed to somewhere between 50% and 70%, otherwise you won't be able to understand it
+
+![speed img](Img/speed.png)
+
+## 6. Go Home and try it out!
 * Go back to your home screen
 * Tripple press the Home or Side button to turn VoiceOver on or off
 
