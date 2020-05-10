@@ -57,4 +57,15 @@ To enable the utton state change for experience PitchBlack:
 * Uncomment the lind under **Step 2**:
 * Run the app and see how it feels like now 
 
+# RESOURCES FOR CREATING ACCESSIBLE APPS
+
+* [AppleVis](https://www.applevis.com/) general purpose site that posts app reviews, teaches blind users how to use Apple software where you can talk to real users
+* [Laura Savino’s](https://twitter.com/savinola) [Interactive Accessibility Talk](https://vimeo.com/151277877) at Layers 2015
+* [John Fox's](https://twitter.com/djembe?lang=en) [Doing Well by Doing Good](https://youtu.be/XfVkNXgT1jE) Mobius 2019 
+* [Build Accessible iOS Apps](https://www.podfeet.com/blog/tutorials-5/build-accessible-ios-apps/); Podfeet Podcast hosting Donald Burr 2017
+* [Paul Hudson’s](https://twitter.com/twostraws) [Checklist on making apps more accessible](https://www.hackingwithswift.com/articles/91/checklist-how-to-make-your-ios-app-more-accessible) 2018
+* [Mobile Accessibility Talk] (https://www.youtube.com/watch?v=yn-6Ee7bwRQ&feature=emb_logo) by Chris McMeeking
+* [Stanford Lecture on Accessibility](https://www.youtube.com/watch?v=NOzXRBom7bw) by Skylar Peterson
+* [Apple's UI Accessiblity Documentation](https://developer.apple.com/documentation/uikit/accessibility/uiaccessibility)
+
 This is the accompanying app for AppBuilder 2020, talk UI Mode: Pitch Black.
