@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreHaptics
 
 class PassThroughView: UIView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -20,237 +19,100 @@ class ViewController: UIViewController {
     let monthsData = ["January","February","March","April","May","June","July", "August","September","October","November","December"]
     let years = Array(1930...2010)
     
+    @IBOutlet weak var cheeseLoverSwitch: UISwitch!
+    @IBOutlet weak var cheeseLoverLabel: UILabel!
+    @IBOutlet weak var idealPriceLabel: UILabel!
+    @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var birthdayPicker: UIPickerView!
+    @IBOutlet weak var birthdayLabel: UILabel!
+    @IBOutlet weak var priceSlider: UISlider!
     @IBOutlet weak var enterButton: UIButton!
     
-    @IBOutlet weak var blackPassthroughView: PassThroughView!
-    @IBOutlet weak var slider: UISlider!
-    var i = 0
-    // Track the screen dimensions:
-    private lazy var windowWidth: CGFloat = {
-        return UIScreen.main.bounds.size.width
-    }()
+    private var hasPrice: Bool {
+        priceSlider.value > 0
+    }
     
-    private lazy var windowHeight: CGFloat = {
-        return UIScreen.main.bounds.size.height
-    }()
+    private var isCheeseLover: Bool {
+        cheeseLoverSwitch.isOn
+    }
     
-    private lazy var supportsHaptics: Bool = {
-        // Check if the device supports haptics.
-        let hapticCapability = CHHapticEngine.capabilitiesForHardware()
-        return hapticCapability.supportsHaptics
-    }()
-    
-    // Timer to handle transient haptic playback:
-    private var transientTimer: DispatchSourceTimer?
-    
-    private var engine: CHHapticEngine!
-    private var engineNeedsStart = true
-    private var continuousPlayer: CHHapticAdvancedPatternPlayer!
+    private var isOver18: Bool = false
+    private var hasInteractedWithPicker: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        prettify()
-        // Do any additional setup after loading the view.
+        enterButton.isEnabled = false
+        setupUI()
+        setupCustomAccessibility()
         
-//        if let window = UIApplication.shared.windows.last {
-//            //blackPassthroughView.removeFromSuperview()
-//            //window.addSubview(blackPassthroughView)
-//        }
-//
-//
-//        let allUI: [UIView] = [aButton, aLabel, naButton, naLabel]
-//
-//        aButton.isAccessibilityElement = true
-//        aLabel.isAccessibilityElement = true
-//
-//        for ui in allUI {
-//            if !ui.isAccessibilityElement {
-//                ui.backgroundColor = .black
-//            }
-//        }
-//
-//        addGestureRecognizers()
-//        //createAndStartHapticsEngine()
-//
+        // Step 1: Uncomment line below to hear an auditory overview when you first open the app.
+        // addAuditoryOverview()
     }
     
-    private func setupPickers() {
-        
-    }
-    
-    private func prettify() {
-        enterButton.layer.borderColor = UIColor.black.cgColor
-        enterButton.layer.borderWidth = 2
-    }
-    
-    @IBAction func didTapEnter(_ sender: Any) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-          UIAccessibility.post(notification: .announcement, argument: "Sign Up enabled.")
+    private func addAuditoryOverview() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          UIAccessibility.post(notification: .announcement,
+                               argument: "Pitch Black finds you your perfect cheese. Answer 3 questions to find your match.")
         }
+    }
+    
+    private func setupCustomAccessibility() {
+        priceSlider.accessibilityValue = "\(Int(priceSlider.value)) €"
+    }
+    
+    private func setupUI() {
+        let color = enterButton.isEnabled ? UIColor.blue : UIColor.gray.withAlphaComponent(0.5)
+        enterButton.layer.borderColor = color.cgColor
+        enterButton.layer.borderWidth = 2
+        enterButton.setTitleColor(color, for: .normal)
+        enterButton.setTitleColor(color, for: .disabled)
+    }
+    
+    private func enableButtonIfPossible() {
+        let allTrue = hasPrice && isCheeseLover && isOver18 && hasInteractedWithPicker
+        
+        let stateChanged = enterButton.isEnabled != allTrue
+        enterButton.isEnabled = allTrue
+        
+        updateUI()
+        
+        // Step 2: Uncomment this line to communicate button state change through Voice Over
+        // communicateButtonState(stateChanged: stateChanged, shouldEnable: allTrue)
+    }
+    
+    private func communicateButtonState(stateChanged: Bool, shouldEnable: Bool) {
+        if stateChanged {
+            if !shouldEnable {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                  UIAccessibility.post(notification: .announcement, argument: "Find Your Cheese Match button dimmed.")
+                }
+                
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                  UIAccessibility.post(notification: .announcement, argument: "Find Your Cheese Match button enabled.")
+                }
+            }
+        }
+    }
+    
+    private func updateUI() {
+        idealPriceLabel.textColor = hasPrice ? .black : .red
+        birthdayLabel.textColor = isOver18 && hasInteractedWithPicker ? .black : .red
+        cheeseLoverLabel.textColor = isCheeseLover ? .black : .red
+        setupUI()
+    }
+    
+    @IBAction func priceSliderDidChange(_ sender: UISlider) {
+        let value = "\(Int(sender.value))"
+        
+        priceSlider.accessibilityValue = "\(value) €"
+        priceLabel.text = "\(value) (€)"
+        enableButtonIfPossible()
     }
     
     @IBAction func changeState(_ sender: UISwitch) {
-        if sender.isOn {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-              UIAccessibility.post(notification: .announcement, argument: "Sign Up dimmed.")
-            }
-            
-            //UIAccessibility.post(notification: .layoutChanged, argument: "Sign Up button dimmed.")
-            //UIAccessibility.post(notification: .screenChanged, argument: "Sign Up button dimmed.")
-            
-//            UIAccessibility.post(notification: .screenChanged, argument: sender)
-        } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-              UIAccessibility.post(notification: .announcement, argument: "Sign Up button enabled.")
-            }
-            //UIAccessibility.post(notification: .layoutChanged, argument: "Sign Up button enabled.")
-            //UIAccessibility.post(notification: .screenChanged, argument: "Sign Up button enabled.")
-//            UIAccessibility.post(notification: .screenChanged, argument: sender)
-        }
+        enableButtonIfPossible()
     }
-    
-    func addGestureRecognizers() {
-        
-//        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(recognizer:)))
-//        longPress.minimumPressDuration = 0
-//
-//        view.addGestureRecognizer(longPress)
-    }
-    
-
-    @IBAction func touchDown(_ sender: Any) {
-        playHapticTransient(time: 0,
-        intensity: 1.0,
-        sharpness: 1.0)
-    }
-    
-    @IBAction func touchUpInside(_ sender: Any) {
-        playHapticTransient(time: 0,
-        intensity: 1.0,
-        sharpness: 1.0)
-    }
-    
-    func createAndStartHapticsEngine() {
-        do {
-            engine = try CHHapticEngine()
-        } catch {
-            //fatalError("Couldn't initialize haptic engine.")
-        }
-        
-        engine.playsHapticsOnly = true
-        
-        // Handle stopping and resetting etc...
-        
-        do {
-            try engine.start()
-        } catch {
-            fatalError("Couldn't start haptic engine.")
-        }
-    }
-    
-    @objc func handleLongPress(recognizer: UILongPressGestureRecognizer) {
-        
-//        let location = recognizer.location(in: view)
-//        print(location)
-//
-//        switch recognizer.state {
-//        case .began:
-//            if aButton.frame.contains(location) {
-//                print("Inside the bounds")
-//                playHapticTransient(time: 0,
-//                                    intensity: 1.0,
-//                                    sharpness: 1.0)
-//            } else {
-//                print("Outside bounds")
-//            }
-//        case .ended:
-//            if aButton.frame.contains(location) {
-//                print("Inside the bounds")
-//                playHapticTransient(time: 0,
-//                                    intensity: 1.0,
-//                                    sharpness: 1.0)
-//            } else {
-//                print("Outside bounds")
-//            }
-//        case .changed, .cancelled, .failed, .possible: break
-//        @unknown default: break
-//        }
-    }
-    
-    /// - Tag: PlayTransientPattern
-    // Play a haptic transient pattern at the given time, intensity, and sharpness.
-    private func playHapticTransient(time: TimeInterval,
-                                     intensity: Float,
-                                     sharpness: Float) {
-        
-        // Abort if the device doesn't support haptics.
-        if !supportsHaptics {
-            return
-        }
-        
-        
-        // Create an event (static) parameter to represent the haptic's intensity.
-        let intensityParameter = CHHapticEventParameter(parameterID: .hapticIntensity,
-                                                        value: intensity)
-        
-        // Create an event (static) parameter to represent the haptic's sharpness.
-        let sharpnessParameter = CHHapticEventParameter(parameterID: .hapticSharpness,
-                                                        value: sharpness)
-        
-        // Create an event to represent the transient haptic pattern.
-        let event = CHHapticEvent(eventType: .hapticTransient,
-                                  parameters: [intensityParameter, sharpnessParameter],
-                                  relativeTime: 0)
-        
-        // Create a pattern from the haptic event.
-        do {
-            let pattern = try CHHapticPattern(events: [event], parameters: [])
-            
-            // Create a player to play the haptic pattern.
-            let player = try engine.makePlayer(with: pattern)
-            try player.start(atTime: CHHapticTimeImmediate) // Play now.
-        } catch let error {
-            print("Error creating a haptic transient pattern: \(error)")
-        }
-    }
-    
-    @IBAction func playButton(_ sender: Any) {
-        i += 1
-        print("Running \(i)")
-
-        switch i {
-        case 1:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.error)
-
-        case 2:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.success)
-
-        case 3:
-            let generator = UINotificationFeedbackGenerator()
-            generator.notificationOccurred(.warning)
-
-        case 4:
-            let generator = UIImpactFeedbackGenerator(style: .light)
-            generator.impactOccurred()
-
-        case 5:
-            let generator = UIImpactFeedbackGenerator(style: .medium)
-            generator.impactOccurred()
-
-        case 6:
-            let generator = UIImpactFeedbackGenerator(style: .heavy)
-            generator.impactOccurred()
-
-        default:
-            let generator = UISelectionFeedbackGenerator()
-            generator.selectionChanged()
-            i = 0
-        }
-    }
-    
 }
 
 extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
@@ -286,6 +148,16 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         }
         
         return label
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        hasInteractedWithPicker = true
+        switch component {
+        case 0, 1, 2:
+            isOver18 = years[row] < 2001
+        default: break
+        }
+        enableButtonIfPossible()
     }
 }
 

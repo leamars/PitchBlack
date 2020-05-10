@@ -13,6 +13,7 @@
 		676E20E22455A3F9001573EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 676E20E02455A3F9001573EA /* Main.storyboard */; };
 		676E20E42455A3FA001573EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 676E20E32455A3FA001573EA /* Assets.xcassets */; };
 		676E20E72455A3FA001573EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 676E20E52455A3FA001573EA /* LaunchScreen.storyboard */; };
+		6770CF38246826DD00A81952 /* SelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6770CF37246826DD00A81952 /* SelectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		676E20E32455A3FA001573EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		676E20E62455A3FA001573EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		676E20E82455A3FA001573EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6770CF37246826DD00A81952 /* SelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				676E20DA2455A3F9001573EA /* AppDelegate.swift */,
 				676E20DC2455A3F9001573EA /* SceneDelegate.swift */,
 				676E20DE2455A3F9001573EA /* ViewController.swift */,
+				6770CF37246826DD00A81952 /* SelectionViewController.swift */,
 				676E20E02455A3F9001573EA /* Main.storyboard */,
 				676E20E32455A3FA001573EA /* Assets.xcassets */,
 				676E20E52455A3FA001573EA /* LaunchScreen.storyboard */,
@@ -139,6 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				676E20DF2455A3F9001573EA /* ViewController.swift in Sources */,
+				6770CF38246826DD00A81952 /* SelectionViewController.swift in Sources */,
 				676E20DB2455A3F9001573EA /* AppDelegate.swift in Sources */,
 				676E20DD2455A3F9001573EA /* SceneDelegate.swift in Sources */,
 			);
