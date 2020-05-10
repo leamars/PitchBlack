@@ -1,4 +1,4 @@
-# INSTRUCTIONS
+# SETUP VOICE OVER
 
 ## 1. Clone the repo
 
@@ -20,10 +20,41 @@
 
 ![speed img](Img/speed.png)
 
-## 6. Go Home and try it out!
+## 6. Go to your Home Screen and try it out!
 * Go back to your home screen
 * Tripple press the Home or Side button to turn VoiceOver on or off
 
 ![vo shortcut img](Img/voShortcut.png)
+
+# HOW TO USE THIS APP 
+
+This app shows two approaches of how to use audio to communicate what's on a touchscreen when a person can't see it.
+
+* Open the app in VoiceOver mode
+* Explore the interface elements for about 5 minutes
+* Do you understand what the app does?
+* Do you understand what you can do with it?
+
+## 1. Auditory Overviews
+
+An auditory overview is a technique of describing a user interface through audio alone. The aim of an auditory overview is to situate the user, covering the key affordances and actions of a particular screen. Normally a user has to create this overview on their own by exploring and discovering interface controls one-by-one. An auditory overview thus minimizes the time and cognitive effort the user has to make to understand the interface.
+
+To enable the auditory overview experience for PitchBlack:
+
+* Open the PitchBlack project in Xcode
+* Go to `ViewController.swift > viewDidLoad()`
+* Uncomment the lind under **Step 1**:
+* Run the app and see how it feels like now 
+
+## 2. Communicating State Changes
+
+Forms are a particularly difficult UI experience to create and communicate effectively, even when your users have vision at their disposal. When you can't see, it's even harder. Let's imagine a common scenario. A button at the end of a form is disabled until the right parts of a form are filled in. Normally, a button changes visually when it goes from disabled to enabled. How can we communicate that auditorially? I provide one simple example, but I challenge you to think of the edge case where this type of a solution would be a poor choice. What else we could do?
+
+To enable the utton state change for experience PitchBlack:
+
+* Open the PitchBlack project in Xcode
+* Go to `ViewController.swift > enableButtonIfPossible()`
+* Uncomment the lind under **Step 2**:
+* Run the app and see how it feels like now 
 
 This is the accompanying app for AppBuilder 2020, talk UI Mode: Pitch Black.
